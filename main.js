@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 const { EventEmitter } = require('events');
 
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION" ]});
 
 const prefix = '>';
 
@@ -10,12 +10,22 @@ const fs = require('fs');
 
 client.commands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
-for(const file of commandFiles){
-    const command = require(`./commands/${file}`);
+const dir = ['moderator', 'warnings']; //Add your subfolders here and place your commands in the respective folder and it will load - Sabba7h
 
-    client.commands.set(command.name, command); 
-}
+dir.forEach(d => {
+    const commandFiles = fs.readdirSync(`./commands/${d}`).filter(file => file.endsWith('.js'));
+    console.log(`Loading ${commandFiles.length} commands from directory "${d}"\n`)
+
+    for (const file of commandFiles) {
+        const command = require(`./commands/${d}/${file}`);
+
+        console.log(`Loading command "${command.name}"`)
+
+        client.commands.set(command.name, command);
+    }
+
+    console.log('\n')
+})
 
 client.once('ready', () => {
     console.log('Vin is online!');
@@ -23,7 +33,7 @@ client.once('ready', () => {
 
 
 
-client.login('Nzg0MTE3Mjg1NzE0NTI2MjA5.X8koIQ.YYSVLg3HVvsFqxODEOOUXfU-_JI');
+client.login('Nzg0MTE3Mjg1NzE0NTI2MjA5.X8koIQ.FrIuqskDWffXWErn8F5O0h5Sci4');
 
 
 client.on('message', message =>{
@@ -32,10 +42,13 @@ client.on('message', message =>{
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
-//_____________________________INFORMATIONAL_COMMAND(S)________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+//_____________________________MISC_COMMAND(S)________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
     if(command === 'announcements'){
         client.commands.get('announcements').execute(message, args);
+
+    } else if (command == 'rl'){
+        client.commands.get('reactionrole').execute(message, args, Discord, client);
     
 //______________________________MODERATOR_COMMAND(S)_________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
@@ -110,9 +123,11 @@ client.on('message', message =>{
         message.delete()
         const exampleEmbed = new Discord.MessageEmbed()
             .setColor('#f5d5ff')
-            .setTitle('Frequently Asked Question #1')
-            .setDescription('Where do I get color roles or make a suggestion for a certain color? \n \n You can currently get one of 14 colours in <#785901230848999504>. To make a suggestion please ask a moderator to DM me so that I could maybe add it.')
-            
+            .setTitle('Where do I get color roles or make a suggestion for a certain color?')
+            .setDescription('You can currently get one of 14 colours in <#785901230848999504>. To make a suggestion please ask a moderator to DM me so that I could maybe add it.')
+            .setAuthor('Frequently Asked Question #1')
+            .setFooter('Frequently Asked Questions')
+
         message.channel.send(exampleEmbed);
             
             //message.channel.send(`<@${memberTarget.user.id}>, Frequently Asked Question #1 is located at https://discord.com/channels/705179346704400455/771426489660604466/786237599999983626. Please visit there and visit that channel if you have any questions about anything. Please try not to ping a mod with any questions. Thank you.`).then(d_msg => (d_msg.suppressEmbeds(true))); 
@@ -121,8 +136,10 @@ client.on('message', message =>{
         message.delete()
         const exampleEmbed = new Discord.MessageEmbed()
             .setColor('#f5d5ff')
-            .setTitle('Frequently Asked Question #2')
-            .setDescription('How do I post in <#747392558845526026>? \n \n You would DM a staff member and they will post it there for you. You can visit <#747392558845526026> to see what it would look like when they post it.')
+            .setTitle('How do I post in #art?')
+            .setDescription('You would DM a staff member and they will post it there for you. You can visit <#747392558845526026> to see what it would look like when they post it.')
+            .setAuthor('Frequently Asked Question #2')
+            .setFooter('Frequently Asked Questions')
             
         message.channel.send(exampleEmbed);
     
@@ -130,8 +147,32 @@ client.on('message', message =>{
         message.delete()
         const exampleEmbed = new Discord.MessageEmbed()
             .setColor('#f5d5ff')
-            .setTitle('Frequently Asked Question #3')
-            .setDescription('What do I do if people think I am under the ToS age when really I am not? \n \n You do not have to worry about other people in the server thinking you are under the ToS age. If a staff member asks you must give an honest answer. The staff team is the only group of people here that can "hurt" you.')
+            .setTitle('What do I do if people think I am under the ToS age when really I am not?')
+            .setDescription('You do not have to worry about other people in the server thinking you are under the ToS age. If a staff member asks you must give an honest answer. The staff team is the only group of people here that can "hurt" you.')
+            .setAuthor('Frequently Asked Question #3')
+            .setFooter('Frequently Asked Questions')
+            
+        message.channel.send(exampleEmbed);
+
+    } else if (command == 'faq4'){
+        message.delete()
+        const exampleEmbed = new Discord.MessageEmbed()
+            .setColor('#f5d5ff')
+            .setTitle('Why can I not use Rhythm bot?')
+            .setDescription('You do not have access to rhythm bot; I changed it so only people with the DJ role can use it. Meaning if you do not have the DJ role he is inaccesable. You are able to use MEE6 using **!play** though.')
+            .setAuthor('Frequently Asked Question #4')
+            .setFooter('Frequently Asked Questions')
+            
+        message.channel.send(exampleEmbed);
+
+    } else if (command == 'faq5'){
+        message.delete()
+        const exampleEmbed = new Discord.MessageEmbed()
+            .setColor('#f5d5ff')
+            .setTitle('How do I gain levels/xp?')
+            .setDescription('Currently, you can only gain xp in 4 channels; <#785736528692772884>, <#769400286199676938>, <#769400336686907402>, and <#769400363819991061>. I disabled gaining xp in all other channels.')
+            .setAuthor('Frequently Asked Question #5')
+            .setFooter('Frequently Asked Questions')
             
         message.channel.send(exampleEmbed);
 
@@ -140,8 +181,10 @@ client.on('message', message =>{
     } else if (command == 'helpcodesab'){
         message.channel.send('Alright <@633401293968375823>, <@309477922463416322> please help him. He has an issue with the code.')
     
-//__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+//______________________________REACTION_ROLE_COMMAND(S)______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-    } 
-
+    } else if (command == 'reactionrole'){
+        client.commands.get('reactionrole').execute(message, args, Discord, client);
+        
+    }
 });  

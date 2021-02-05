@@ -1,5 +1,5 @@
 {
-  "name": "discord",
+  "name": "vin-bot",
   "version": "1.0.0",
   "description": "Discord bot",
   "main": "main.js",
@@ -9,6 +9,8 @@
   "author": "lizzy",
   "license": "ISC",
   "dependencies": {
+    "discord.js": "^12.5.1",
     "ms": "^2.1.3"
-  }
+  },
+  "devDependencies": {}
 }
