@@ -33,7 +33,7 @@ client.once('ready', () => {
 
 
 
-client.login('Nzg0MTE3Mjg1NzE0NTI2MjA5.X8koIQ.FrIuqskDWffXWErn8F5O0h5Sci4');
+client.login('ODA5MDc2NDc3Nzg1ODAwNzM1.YCP1MA.naoboVSTGAVh_LzlrZp6AFmWoak');
 
 
 client.on('message', message =>{
@@ -47,7 +47,7 @@ client.on('message', message =>{
     if(command === 'announcements'){
         client.commands.get('announcements').execute(message, args);
 
-    } else if (command == 'rl'){
+    } else if (command == 'rr'){
         client.commands.get('reactionrole').execute(message, args, Discord, client);
     
 //______________________________MODERATOR_COMMAND(S)_________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
